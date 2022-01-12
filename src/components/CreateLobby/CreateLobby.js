@@ -66,7 +66,7 @@ function createRandomRoom({
       setError('')
 
       if (!res.data) {
-        history.push(`/g/${random}${getQueries({pack})}`)
+        history.push(`/l/${random}${getQueries({pack})}`)
       } else {
         createRandomRoom({
           history,
