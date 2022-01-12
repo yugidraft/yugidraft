@@ -96,7 +96,7 @@ const CreateLobby = () => {
   const [error, setError] = useState('');
   const [publicPacks, setPublicPacks] = useState([]);
   useEffect(() => {
-    axios.get(`${PORT}/api/getApprovedPublicDecks`).then((res) => {
+    axios.get(`${PORT}/api/getApprovedPublicPacks`).then((res) => {
       setPublicPacks(res.data);
     })
   }, [])
@@ -119,13 +119,13 @@ const CreateLobby = () => {
           <List>
             {publicPacks.map(({name}) => (
               <ListItem key={name}>
-                <PublicDeckButton
+                <PublicPackButton
                   type="button"
                   onClick={() => handlePublicPackClick({name, pack, setPack})}
                   style={{color: name === pack ? '#2cce9f' : null}}
                 >
                   {name.replace(/-/g, ' ')}
-                </PublicDeckButton>
+                </PublicPackButton>
               </ListItem>
             ))}
           </List>
@@ -149,7 +149,7 @@ const ListItem = styled.li`
   border-bottom: 1px solid rgb(44, 206, 159);
 `
 
-const PublicDeckButton = styled.button`
+const PublicPackButton = styled.button`
   apperance: none;
   font-size: 1em;
   background: 0;
