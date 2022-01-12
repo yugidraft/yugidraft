@@ -26,7 +26,7 @@ module.exports = (app) => {
     app.get('/api/getDeck', async function (req, res) {
     try {
         var uniques = Card.distinct( "sets.set_name", function(error, names)
-        return res.send(allApprovedPublicDecks);
+        return res.send(names);
     } catch (err) {
         console.error(err);
         return res

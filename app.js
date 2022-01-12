@@ -28,7 +28,7 @@ db.once("open", () => {
   console.log("Connected to DB");
 });
 
-var players = {};
+
 app.use(express.static("public"));
 
 // app.get('/', function (req, res) {
