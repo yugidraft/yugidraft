@@ -13,10 +13,10 @@ const CardSchema = new Schema({
   archetype: { type: String },
   img: { type: String },
   sets: [{
-    name: { type: String } ,
-    code: { type: String } ,
-    rarity: { type: String },
-    rarity_code: { type: String }
+    set_name: { type: String } ,
+    set_code: { type: String } ,
+    set_rarity: { type: String },
+    set_rarity_code: { type: String }
   }],
 })
 
