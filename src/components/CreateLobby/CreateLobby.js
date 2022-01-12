@@ -4,6 +4,7 @@ import axios from 'axios';
 import {PORT} from '.../server.js'
 import styled from "styled-components"
 
+
 function handleCreateLobby({
   e,
   history,
@@ -83,6 +84,7 @@ function createRandomRoom({
 }
 
 const handlePublicSetClick = ({name, set, setSet}) => {
+  name = set.set_name
   if (set === name) {
     return setSet('')
   }
@@ -100,6 +102,7 @@ const CreateLobby = () => {
       setPublicSets(res.data);
     })
   }, [])
+
 
   return (
     <>
