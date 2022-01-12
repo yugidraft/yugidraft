@@ -7,7 +7,7 @@ import styled from "styled-components"
 function handleCreateLobby({
   e,
   history,
-  pack,
+  set,
   setError,
   setLoading,
 }) {
@@ -15,14 +15,14 @@ function handleCreateLobby({
   setLoading('createLobby')
 
   axios
-    .post(`${PORT}/api/getPack`, {pack})
+    .post(`${PORT}/api/getSet`, {set})
     .then((res) => {
       if (res.data) {
         setLoading(false)
         setError('')
         createRandomRoom({
           history,
-          pack,
+          set,
           setError,
           setLoading,
         })
@@ -37,11 +37,11 @@ function handleCreateLobby({
     })
 }
 
-function getQueries({pack}) {
+function getQueries({set}) {
   let queryString = ''
 
-  if (pack) {
-    queryString += `?pack=${pack}`
+  if (set) {
+    queryString += `?set=${set}`
   }
 
   return queryString;
@@ -49,7 +49,7 @@ function getQueries({pack}) {
 
 function createRandomRoom({
   history,
-  pack,
+  set,
   setError,
   setLoading,
 }) {
@@ -66,11 +66,11 @@ function createRandomRoom({
       setError('')
 
       if (!res.data) {
-        history.push(`/l/${random}${getQueries({pack})}`)
+        history.push(`/l/${random}${getQueries({set})}`)
       } else {
         createRandomRoom({
           history,
-          pack,
+          set,
           setError,
           setLoading,
         })
@@ -82,22 +82,22 @@ function createRandomRoom({
     })
 }
 
-const handlePublicPackClick = ({name, pack, setPack}) => {
-  if (pack === name) {
-    return setPack('')
+const handlePublicSetClick = ({name, set, setSet}) => {
+  if (set === name) {
+    return setSet('')
   }
-  setPack(name)
+  setSet(name)
 }
 
 const CreateLobby = () => {
   const history = useHistory();
-  const [pack, setPack] = useState('');
+  const [set, setSet] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [publicPacks, setPublicPacks] = useState([]);
+  const [publicSets, setPublicSets] = useState([]);
   useEffect(() => {
-    axios.get(`${PORT}/api/getApprovedPublicPacks`).then((res) => {
-      setPublicPacks(res.data);
+    axios.get(`${PORT}/api/getApprovedPublicSets`).then((res) => {
+      setPublicSets(res.data);
     })
   }, [])
 
@@ -109,23 +109,23 @@ const CreateLobby = () => {
           handleCreateLobby({
             e,
             history,
-            pack,
+            set,
             setError,
             setLoading,
           })
         }
       >
-        {publicPacks && (
+        {publicSets && (
           <List>
-            {publicPacks.map(({name}) => (
+            {publicSets.map(({name}) => (
               <ListItem key={name}>
-                <PublicPackButton
+                <PublicSetButton
                   type="button"
-                  onClick={() => handlePublicPackClick({name, pack, setPack})}
-                  style={{color: name === pack ? '#2cce9f' : null}}
+                  onClick={() => handlePublicSetClick({name, set, setSet})}
+                  style={{color: name === set ? '#2cce9f' : null}}
                 >
                   {name.replace(/-/g, ' ')}
-                </PublicPackButton>
+                </PublicSetButton>
               </ListItem>
             ))}
           </List>
@@ -149,7 +149,7 @@ const ListItem = styled.li`
   border-bottom: 1px solid rgb(44, 206, 159);
 `
 
-const PublicPackButton = styled.button`
+const PublicSetButton = styled.button`
   apperance: none;
   font-size: 1em;
   background: 0;
