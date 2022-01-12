@@ -1,4 +1,4 @@
-
+import CreateLobby from "../CreateLobby/CreateLobby"
 
 function Home(){
 
@@ -6,7 +6,8 @@ function Home(){
     <>
       <h1>yugidraft</h1>
       <p>Simulate a Yu-Gi-Oh! draft online</p>
-      <button>yo</button>
+      <hr></hr>
+
     </>
   )
 }
