@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {Link, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import {PORT} from '.../server.js'
+import styled from "styled-components"
 
 function handleCreateLobby({
   e,
@@ -81,16 +82,11 @@ function createRandomRoom({
     })
 }
 
-const handlePublicPackClick = ({name, pack, setDeck}) => {
+const handlePublicPackClick = ({name, pack, setPack}) => {
   if (pack === name) {
     return setPack('')
   }
   setPack(name)
-}
-
-const handleKeyUp = ({e, setPack}) => {
-  const val = e.target.value.trim().toLowerCase().replace(/\s+/g, '-')
-  setPack(val)
 }
 
 const CreateLobby = () => {
@@ -98,10 +94,10 @@ const CreateLobby = () => {
   const [pack, setPack] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [publicDecks, setPublicDecks] = useState([]);
+  const [publicPacks, setPublicPacks] = useState([]);
   useEffect(() => {
     axios.get(`${PORT}/api/getApprovedPublicDecks`).then((res) => {
-      setPublicDecks(res.data);
+      setPublicPacks(res.data);
     })
   }, [])
 
@@ -110,10 +106,10 @@ const CreateLobby = () => {
       <h2>Create lobby</h2>
       <form
         onSubmit={(e) =>
-          handleCreateGame({
+          handleCreateLobby({
             e,
             history,
-            deck,
+            pack,
             setError,
             setLoading,
           })
@@ -126,7 +122,7 @@ const CreateLobby = () => {
                 <PublicDeckButton
                   type="button"
                   onClick={() => handlePublicPackClick({name, pack, setPack})}
-                  style={{color: name === deck ? '#2cce9f' : null}}
+                  style={{color: name === pack ? '#2cce9f' : null}}
                 >
                   {name.replace(/-/g, ' ')}
                 </PublicDeckButton>
