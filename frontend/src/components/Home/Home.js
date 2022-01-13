@@ -119,6 +119,7 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
     justify-content: center;
     padding: 0;
+    height: 95vh;
   }
   button,
   input {
