@@ -3,7 +3,7 @@ import { ToastContainer, toast, Slide } from "react-toastify";
 // import { HelpIcon } from "../icons";
 import styled, { createGlobalStyle } from "styled-components";
 
-const PrivacyCheck = ({ setIsPrivate, title, toastText }) => {
+const PrivacyCheck = ({ setIsPrivate, toastText }) => {
   return (
     <>
       <GlobalStyle />
@@ -15,7 +15,7 @@ const PrivacyCheck = ({ setIsPrivate, title, toastText }) => {
             onChange={() => setIsPrivate((bool) => !bool)}
           />
           <PublicLabel htmlFor="checkbox">
-            Make {title} private{" "}
+            Make lobby private{" "}
             <IconWrap
               type="button"
               onClick={() =>

@@ -76,7 +76,7 @@ const Landing = () => {
           })
         }
       >
-        <JoinGameLabel htmlFor="joingame">GOT THE GAME CODE?</JoinGameLabel>
+        <JoinGameLabel htmlFor="joingame">GOT THE LOBBY CODE?</JoinGameLabel>
         <JoinGameInput
           ref={joinGameInputRef}
           id="joingame"
@@ -86,11 +86,11 @@ const Landing = () => {
           required
         />
         <GreenButton type="submit" disabled={loading === "join"}>
-          Join Game
+          Join Lobby
         </GreenButton>
         {errorMsg.type === "join" && !errorMsg.message ? (
           <GameExistsMessage>
-            Game doesn't exist. Would you like to{" "}
+            Lobby doesn't exist. Would you like to{" "}
             <Link to={`/g/${joinGameInputRef.current.value}`}>create it?</Link>
           </GameExistsMessage>
         ) : (
@@ -101,10 +101,10 @@ const Landing = () => {
           <OrText>OR</OrText>
         </OrTextWrap>
         <BlueButton type="button" to="/games">
-          Public Games
+          Public Lobbies
         </BlueButton>
       </Form>
-      <OrangeButton to="/create-game">Create Game</OrangeButton>
+      <OrangeButton to="/create-lobby">Create Lobby</OrangeButton>
     </LandingWrapper>
   );
 };
