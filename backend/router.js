@@ -3,6 +3,8 @@ const express = require("express");
 const server = require("./server");
 const User = require("./models/user");
 const Card = require("./models/card");
+const { getDeck } = require("./models/deck");
+
 const router = express.Router();
 
 router.get('/', async function (req, res) {
@@ -70,19 +72,19 @@ router.get("/api/getPublicDecks", async function (req, res) {
   //       "Error: There was an issue retrieving public decks...",
   //       err.message
   //     );
-  // }
-router.get("/api/getDeck/:name", async (req, res) => {
-  console.log("made it in");
-  const deckName = req.params.name;
-  const search = await Card.find({ "sets.set_name": deckName })
-    .then(async (cards) => {
-      // console.log(cards);
-      return res.json(cards);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+//   // }
+// router.get("/api/getDeck/:name", async (req, res) => {
+//   console.log("made it in");
+//   const deckName = req.params.name;
+//   const search = await Card.find({ "sets.set_name": deckName })
+//     .then(async (cards) => {
+//       // console.log(cards);
+//       return res.json(cards);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
 router.get("/api/listDecks", async (req, res) => {
   var deck = [];
@@ -138,19 +140,38 @@ router.get("/api/listDecks", async (req, res) => {
   // console.log(pack);
 // });
 
-// router.post("/api/setPack/:name", async (req, res) => {
-// console.log("inside setPack");
-//   const packName = req.params.name;
-//   const search = await Card.find({ "sets.set_name": packName })
+// router.post("/api/getDeck", async (req, res) => {
+// console.log("inside getdeck post");
+//   const deckName = req.body.name;
+//   const search = await Card.find({ "sets.set_name": deckName })
 //     .then(async (cards) => {
 //       // console.log(cards);
-//       User.deck.push(cards);
+//       Deck.deck.push(cards);
 //       return res.json(cards);
 //     })
 //     .catch((err) => {
 //       console.log(err);
 //     });
 // });
+
+router.post("/api/getDeck", async function (req, res) {
+  const deckName = req.body
+  console.log(deckName);
+  try {
+    const deckExists = await getDeck(deckName);
+    console.log({ deckExists });
+    if (deckExists) {
+      return res.send("Deck exists!");
+    } else {
+      return res.status(500).send("Error: This deck doesn't exist...");
+    }
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(500)
+      .send("Error: There was an issue retrieving this deck...", err.message);
+  }
+});
 
 
 module.exports = router;

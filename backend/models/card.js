@@ -20,17 +20,17 @@ const CardSchema = new Schema({
   }],
 })
 
-async function getDeck(deckName) {
-  try {
-    const deck = await Card.find({ "sets.set_name": deckName });
-    return deck;
-  } catch (err) {
-    console.error(
-      "There was an issue trying to access this deck: ",
-      err.message
-    );
-  }
-}
+// async function getDeck(deckName) {
+//   try {
+//     const deck = await Card.find({ "sets.set_name": deckName });
+//     return deck;
+//   } catch (err) {
+//     console.error(
+//       "There was an issue trying to access this deck: ",
+//       err.message
+//     );
+//   }
+// }
 
-module.exports.getDeck = getDeck;
+// module.exports.getDeck = getDeck;
 module.exports = mongoose.model('Card', CardSchema)
