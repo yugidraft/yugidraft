@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const ChooseADeck = ({ setDeck, title, loading, deck, toggle }) => {
+const ChooseADeck = ({ setDeck, loading, deck, toggle }) => {
   const handleSFWClick = () => {
     if (toggle) {
       setDeck(deck === "safe-for-work" ? "" : "safe-for-work");
@@ -18,11 +18,10 @@ const ChooseADeck = ({ setDeck, title, loading, deck, toggle }) => {
     }
 
     setDeck("not-safe-for-work");
-  };n
+  };
 
   return (
     <>
-      <StartTitle>{title}</StartTitle>
       <Flex>
         <BlueButton
           onClick={handleSFWClick}
@@ -48,12 +47,7 @@ const ChooseADeck = ({ setDeck, title, loading, deck, toggle }) => {
 const Flex = styled.div`
   display: flex;
 `;
-const StartTitle = styled.h2`
-  color: #fff;
-  margin: 0.5em 0 0;
-  font-weight: normal;
-  font-size: 1.5em;
-`;
+
 const PinkButton = styled.button`
   display: block;
   appearance: none;

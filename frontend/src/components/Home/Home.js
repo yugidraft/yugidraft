@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
 import axios from "axios";
 import { SERVER_URL } from "../../constants.js";
 // import { LogoIcon } from "../icons";
@@ -55,7 +54,7 @@ function handleJoinGame({
     });
 }
 
-const Landing = ({ title }) => {
+const Landing = () => {
   const history = useHistory();
   const joinGameInputRef = useRef(null);
   const [errorMsg, setErrorMsg] = useState({});
@@ -63,10 +62,8 @@ const Landing = ({ title }) => {
   return (
     <LandingWrapper>
       <GlobalStyle />
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
       <Heading>
+        Yugidraft
       </Heading>
       <Form
         onSubmit={(e) =>
@@ -108,33 +105,6 @@ const Landing = ({ title }) => {
         </BlueButton>
       </Form>
       <OrangeButton to="/create-game">Create Game</OrangeButton>
-      <PinkButton to="/how-to-play">How To Play</PinkButton>
-      <WhiteButton to="/create-deck">
-        Create Deck <BETAText>BETA</BETAText>
-      </WhiteButton>
-      {/* <AltButton onClick={() => history.push('/create-deck')}>Create Deck</AltButton>
-      <AltButton onClick={() => history.push('/edit-deck')}>Edit Deck</AltButton> */}
-      <footer>
-        <FooterText>
-          Completely free and{" "}
-          <InlineLink
-            href="https://github.com/sdennett55/cards-of-personality-frontend"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            open sourced
-          </InlineLink>
-          . No ads, accounts, or subscriptions. If you enjoyed the game and want
-          to say thanks you can{" "}
-          <InlineLink
-            href="https://www.buymeacoffee.com/steved"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            buy me a beer!
-          </InlineLink>
-        </FooterText>
-      </footer>
     </LandingWrapper>
   );
 };
@@ -156,27 +126,7 @@ const GlobalStyle = createGlobalStyle`
     border: 0;
   }
 `;
-const FooterText = styled.p`
-  color: #fff;
-  font-size: 0.8em;
-  font-style: italic;
-  margin: 2em 0 0;
-  max-width: 360px;
-  line-height: 1.3;
-`;
-const InlineLink = styled.a`
-  color: #2cce9f;
 
-  &:hover,
-  &:focus {
-    text-decoration: none;
-  }
-`;
-const BETAText = styled.sup`
-  color: #2cce9f;
-  font-size: 0.7em;
-  font-weight: bold;
-`;
 const LandingWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -191,6 +141,7 @@ const Heading = styled.h1`
   position: relative;
   margin: 0 0 1rem;
   padding: 0 1rem;
+  color: white;
 `;
 
 const ErrorText = styled.p`
@@ -227,42 +178,7 @@ const OrangeButton = styled(Link)`
     outline: 0;
   }
 `;
-const PinkButton = styled(Link)`
-  appearance: none;
-  background: rgb(255, 0, 128);
-  color: #000;
-  font-size: 1em;
-  border: 0;
-  padding: 0.7em 1em;
-  border-radius: 8px;
-  margin: 0.75em 0;
-  font-weight: bold;
-  transition: opacity 0.25s;
-  text-decoration: none;
 
-  @media screen and (max-width: 501px) and (orientation: portrait) {
-    position: absolute;
-    top: -16px;
-    left: -140px;
-    width: 360px;
-    transform: rotate(-25deg);
-  }
-
-  @media screen and (max-height: 501px) {
-    position: absolute;
-    top: -16px;
-    left: -140px;
-    width: 360px;
-    transform: rotate(-25deg);
-  }
-
-  &:hover,
-  &:focus,
-  &:disabled {
-    opacity: 0.5;
-    outline: 0;
-  }
-`;
 const GreenButton = styled.button`
   display: block;
   appearance: none;
@@ -275,27 +191,6 @@ const GreenButton = styled.button`
   margin: 1em 0.5em;
   font-weight: bold;
   transition: opacity 0.25s;
-
-  &:hover,
-  &:focus,
-  &:disabled {
-    opacity: 0.5;
-    outline: 0;
-  }
-`;
-const WhiteButton = styled(Link)`
-  display: block;
-  appearance: none;
-  background: #fff;
-  color: #000;
-  font-size: 1em;
-  border: 0;
-  padding: 0.7em 1em;
-  border-radius: 8px;
-  margin: 0.75em 0.5em;
-  font-weight: bold;
-  transition: opacity 0.25s;
-  text-decoration: none;
 
   &:hover,
   &:focus,
