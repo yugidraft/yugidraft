@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
-import {PORT} from '.../server.js'
 import styled from "styled-components"
 
 function handleCreateLobby({
@@ -15,26 +14,26 @@ function handleCreateLobby({
   setLoading('createLobby')
 
   axios
-    .post(`${PORT}/api/getPack`, {pack})
+    .post(`3001/api/getApprovedPublicPacks`, { pack })
     .then((res) => {
       if (res.data) {
-        setLoading(false)
-        setError('')
+        setLoading(false);
+        setError("");
         createRandomRoom({
           history,
           pack,
           setError,
           setLoading,
-        })
+        });
       } else {
-        setError('This pack could not be found.')
+        setError("This pack could not be found.");
       }
     })
     .catch((err) => {
-      setLoading(false)
-      setError('This pack does not exist.')
-      console.error(err)
-    })
+      setLoading(false);
+      setError("This pack does not exist.");
+      console.error(err);
+    });
 }
 
 function getQueries({pack}) {
@@ -60,7 +59,7 @@ function createRandomRoom({
 
   // check server to make sure random room doesn't already exist
   axios
-    .post(`${PORT}/api/checkAvailableRooms`, {roomName: random})
+    .post(`3001/api/checkAvailableRooms`, {roomName: random})
     .then((res) => {
       setLoading(false)
       setError('')
@@ -96,7 +95,7 @@ const CreateLobby = () => {
   const [error, setError] = useState('');
   const [publicPacks, setPublicPacks] = useState([]);
   useEffect(() => {
-    axios.get(`${PORT}/api/getApprovedPublicPacks`).then((res) => {
+    axios.get(`3001/api/getApprovedPublicPacks`).then((res) => {
       setPublicPacks(res.data);
     })
   }, [])
