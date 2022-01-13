@@ -1,27 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
-import axios from 'axios';
-import styled from "styled-components"
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { PORT } from ".../server.js";
+import styled from "styled-components";
 
-function handleCreateLobby({
-  e,
-  history,
-  pack,
-  setError,
-  setLoading,
-}) {
-  e.preventDefault()
-  setLoading('createLobby')
+function handleCreateLobby({ e, history, set, setError, setLoading }) {
+  e.preventDefault();
+  setLoading("createLobby");
 
   axios
-    .post(`3001/api/getApprovedPublicPacks`, { pack })
+    .post(`${PORT}/api/getSet`, { set })
     .then((res) => {
       if (res.data) {
         setLoading(false);
         setError("");
         createRandomRoom({
           history,
-          pack,
+          set,
           setError,
           setLoading,
         });
@@ -36,69 +31,65 @@ function handleCreateLobby({
     });
 }
 
-function getQueries({pack}) {
-  let queryString = ''
+function getQueries({ set }) {
+  let queryString = "";
 
-  if (pack) {
-    queryString += `?pack=${pack}`
+  if (set) {
+    queryString += `?set=${set}`;
   }
 
   return queryString;
 }
 
-function createRandomRoom({
-  history,
-  pack,
-  setError,
-  setLoading,
-}) {
+function createRandomRoom({ history, set, setError, setLoading }) {
   const random = (
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15)
-  ).substr(0, 5)
+  ).substr(0, 5);
 
   // check server to make sure random room doesn't already exist
   axios
-    .post(`3001/api/checkAvailableRooms`, {roomName: random})
+    .post(`${PORT}/api/checkAvailableRooms`, { roomName: random })
     .then((res) => {
-      setLoading(false)
-      setError('')
+      setLoading(false);
+      setError("");
 
       if (!res.data) {
-        history.push(`/l/${random}${getQueries({pack})}`)
+        history.push(`/l/${random}${getQueries({ set })}`);
       } else {
         createRandomRoom({
           history,
-          pack,
+          set,
           setError,
           setLoading,
-        })
+        });
       }
     })
     .catch((err) => {
-      setError('There was an error on the server. Please try again.')
-      console.error(err)
-    })
+      setError("There was an error on the server. Please try again.");
+      console.error(err);
+    });
 }
 
-const handlePublicPackClick = ({name, pack, setPack}) => {
-  if (pack === name) {
-    return setPack('')
+const handlePublicSetClick = ({ name, set, setSet }) => {
+  name = set.set_name;
+  if (set === name) {
+    return setSet("");
   }
-  setPack(name)
-}
+  setSet(name);
+};
 
 const CreateLobby = () => {
   const history = useHistory();
-  const [pack, setPack] = useState('');
+  const [set, setSet] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [publicPacks, setPublicPacks] = useState([]);
+  const [error, setError] = useState("");
+  const [publicSets, setPublicSets] = useState([]);
   useEffect(() => {
-    axios.get(`3001/api/getApprovedPublicPacks`).then((res) => {
-      setPublicPacks(res.data);
-    })
-  }, [])
+    axios.get(`${PORT}/api/getApprovedPublicSets`).then((res) => {
+      setPublicSets(res.data);
+    });
+  }, []);
 
   return (
     <>
@@ -108,23 +99,23 @@ const CreateLobby = () => {
           handleCreateLobby({
             e,
             history,
-            pack,
+            set,
             setError,
             setLoading,
           })
         }
       >
-        {publicPacks && (
+        {publicSets && (
           <List>
-            {publicPacks.map(({name}) => (
+            {publicSets.map(({ name }) => (
               <ListItem key={name}>
-                <PublicPackButton
+                <PublicSetButton
                   type="button"
-                  onClick={() => handlePublicPackClick({name, pack, setPack})}
-                  style={{color: name === pack ? '#2cce9f' : null}}
+                  onClick={() => handlePublicSetClick({ name, set, setSet })}
+                  style={{ color: name === set ? "#2cce9f" : null }}
                 >
-                  {name.replace(/-/g, ' ')}
-                </PublicPackButton>
+                  {name.replace(/-/g, " ")}
+                </PublicSetButton>
               </ListItem>
             ))}
           </List>
@@ -135,20 +126,20 @@ const CreateLobby = () => {
         </Flex>
       </form>
     </>
-  )
-}
+  );
+};
 
 const Flex = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
 const ListItem = styled.li`
   color: #fff;
   border-bottom: 1px solid rgb(44, 206, 159);
-`
+`;
 
-const PublicPackButton = styled.button`
+const PublicSetButton = styled.button`
   apperance: none;
   font-size: 1em;
   background: 0;
@@ -162,7 +153,7 @@ const PublicPackButton = styled.button`
     outline: 0;
     color: #2cce9f;
   }
-`
+`;
 
 const List = styled.ul`
   list-style: none;
@@ -178,6 +169,6 @@ const List = styled.ul`
   overflow: auto;
   margin-bottom: 1em;
   min-height: 145px;
-`
+`;
 
-export default CreateLobby
+export default CreateLobby;
