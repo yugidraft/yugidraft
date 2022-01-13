@@ -77,7 +77,7 @@ function createRandomRoom({
       setError("");
 
       if (!res.data) {
-        history.push(`/g/${random}${getQueries({ deck, isPrivate })}`);
+        history.push(`/l/${random}${getQueries({ deck, isPrivate })}`);
 
       } else {
         createRandomRoom({
@@ -106,6 +106,7 @@ const CreateLobby = () => {
   const history = useHistory();
   const [deck, setDeck] = useState("safe-for-work");
   const [isPrivate, setIsPrivate] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [publicDecks, setPublicDecks] = useState([]);
   useEffect(() => {
@@ -124,6 +125,7 @@ const CreateLobby = () => {
             history,
             deck,
             setError,
+            setLoading,
             isPrivate,
           })
         }

@@ -54,7 +54,7 @@ function handleJoinGame({
     });
 }
 
-const Landing = () => {
+const Home = () => {
   const history = useHistory();
   const joinLobbyInputRef = useRef(null);
   const [errorMsg, setErrorMsg] = useState({});
@@ -275,4 +275,4 @@ const Form = styled.form`
   align-items: center;
 `;
 
-export default Landing;
+export default Home;
