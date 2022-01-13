@@ -11,19 +11,19 @@ const MAX_ROOM_NAME_CHARS = 16;
 function handleJoinGame({
   e,
   setLoading,
-  joinGameInputRef,
+  joinLobbyInputRef,
   history,
   setErrorMsg,
 }) {
   e.preventDefault();
-  if (joinGameInputRef.current.value.length < MIN_ROOM_NAME_CHARS) {
+  if (joinLobbyInputRef.current.value.length < MIN_ROOM_NAME_CHARS) {
     setErrorMsg({
       type: "join",
       message: `Room name must be at least ${MIN_ROOM_NAME_CHARS} characters long.`,
     });
     return;
   }
-  if (joinGameInputRef.current.value.length > MAX_ROOM_NAME_CHARS) {
+  if (joinLobbyInputRef.current.value.length > MAX_ROOM_NAME_CHARS) {
     setErrorMsg({
       type: "join",
       message: `Room name must be no longer than ${MAX_ROOM_NAME_CHARS} characters.`,
@@ -33,7 +33,7 @@ function handleJoinGame({
   setLoading("join");
   axios
     .post(`${SERVER_URL}/api/checkAvailableRooms`, {
-      roomName: joinGameInputRef.current.value,
+      roomName: joinLobbyInputRef.current.value,
     })
     .then((res) => {
       setLoading("");
@@ -42,7 +42,7 @@ function handleJoinGame({
       if (!res.data) {
         setErrorMsg({ type: "join" });
       } else {
-        history.push(`/g/${joinGameInputRef.current.value}`);
+        history.push(`/l/${joinLobbyInputRef.current.value}`);
       }
     })
     .catch((err) => {
@@ -56,7 +56,7 @@ function handleJoinGame({
 
 const Landing = () => {
   const history = useHistory();
-  const joinGameInputRef = useRef(null);
+  const joinLobbyInputRef = useRef(null);
   const [errorMsg, setErrorMsg] = useState({});
   const [loading, setLoading] = useState("");
   return (
@@ -70,16 +70,16 @@ const Landing = () => {
           handleJoinGame({
             e,
             setLoading,
-            joinGameInputRef,
+            joinLobbyInputRef,
             history,
             setErrorMsg,
           })
         }
       >
-        <JoinGameLabel htmlFor="joingame">GOT THE LOBBY CODE?</JoinGameLabel>
-        <JoinGameInput
-          ref={joinGameInputRef}
-          id="joingame"
+        <JoinLobbyLabel htmlFor="joinlobby">GOT THE LOBBY CODE?</JoinLobbyLabel>
+        <JoinLobbyInput
+          ref={joinLobbyInputRef}
+          id="joinlobby"
           minLength={MIN_ROOM_NAME_CHARS}
           maxLength={MAX_ROOM_NAME_CHARS}
           text="text"
@@ -89,10 +89,10 @@ const Landing = () => {
           Join Lobby
         </GreenButton>
         {errorMsg.type === "join" && !errorMsg.message ? (
-          <GameExistsMessage>
+          <LobbyExistsMessage>
             Lobby doesn't exist. Would you like to{" "}
-            <Link to={`/g/${joinGameInputRef.current.value}`}>create it?</Link>
-          </GameExistsMessage>
+            <Link to={`/g/${joinLobbyInputRef.current.value}`}>create it?</Link>
+          </LobbyExistsMessage>
         ) : (
           errorMsg.type === "join" &&
           errorMsg.message && <ErrorText>{errorMsg.message}</ErrorText>
@@ -150,7 +150,7 @@ const ErrorText = styled.p`
   font-size: 0.8rem;
 `;
 
-const GameExistsMessage = styled.p`
+const LobbyExistsMessage = styled.p`
   color: #fff;
 
   a {
@@ -244,7 +244,7 @@ const OrText = styled.span`
   padding: 0 0.5em;
 `;
 
-const JoinGameInput = styled.input`
+const JoinLobbyInput = styled.input`
   appearance: none;
   border-radius: 8px;
   padding: 0.35em 0.25em;
@@ -259,7 +259,7 @@ const JoinGameInput = styled.input`
     border-color: #2cce9f;
   }
 `;
-const JoinGameLabel = styled.label`
+const JoinLobbyLabel = styled.label`
   display: block;
   text-align: left;
   text-transform: uppercase;
