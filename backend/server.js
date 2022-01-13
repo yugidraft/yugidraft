@@ -38,32 +38,52 @@ var rooms = {};
 app.use(bodyParser.json());
 var MAX_PLAYERS = 8
 
-io.on("connection", function (socket) {
-  socket.on("join room", function ({roomId, myName}) {
-    socket.roomID = roomId
-    console.log('joined room!', socket.roomId, 'socket.id: ', socket.id);
+// let interval;
 
-    // join the room
-    socket.join(roomId);
+// io.on("connection", (socket) => {
+//   console.log("New client connected");
+//   if (interval) {
+//     clearInterval(interval);
+//   }
+//   interval = setInterval(() => getApiAndEmit(socket), 1000);
+//   socket.on("disconnect", () => {
+//     console.log("Client disconnected");
+//     clearInterval(interval);
+//   });
+// });
 
-    // let everyone know that a new player has connected
-    io.to(socket.roomId).emit('user connected', {
-      players: rooms[socket.roomId].players,
-    });
+// const getApiAndEmit = (socket) => {
+//   const response = new Date();
+//   // Emitting a new message. Will be consumed by the client
+//   socket.emit("FromAPI", response);
+// };
 
-    if (rooms[socket.roomId].players.length < MAX_PLAYERS) {
-      rooms[socket.roomId].players.push({ id: socket.id, name: myName || "NEW USER" });
-    }
+// io.on("connection", function (socket) {
+//   socket.on("join room", function ({roomId, myName}) {
+//     socket.roomID = roomId
+//     console.log('joined room!', socket.roomId, 'socket.id: ', socket.id);
 
-    io.to(socket.roomId).emit('new connection', {
-      players: rooms[socket.roomId].players,
-      submittedCards: rooms[socket.roomId].submittedCards,
-      socketId: socket.id,
-    });
+//     // join the room
+//     socket.join(roomId);
 
-    io.to(socket.roomId).emit('joined a room', roomId);
-    })
-})
+//     // let everyone know that a new player has connected
+//     io.to(socket.roomId).emit('user connected', {
+//       players: rooms[socket.roomId].players,
+//     });
+
+//     if (rooms[socket.roomId].players.length < MAX_PLAYERS) {
+//       rooms[socket.roomId].players.push({ id: socket.id, name: myName || "NEW USER" });
+//     }
+
+//     io.to(socket.roomId).emit('new connection', {
+//       players: rooms[socket.roomId].players,
+//       submittedCards: rooms[socket.roomId].submittedCards,
+//       socketId: socket.id,
+//     });
+
+//     io.to(socket.roomId).emit('joined a room', roomId);
+//     })
+// })
     // app.get('/api/getDeck', async function (req, res) {
     // try {
     //     var uniques = Card.distinct( "sets.set_name", function(error, names)
