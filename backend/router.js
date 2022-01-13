@@ -18,7 +18,7 @@ router.post("/api/checkAvailableRooms", function (req, res) {
   return res.end();
 });
 
-router.get("/api/getPacks", async function (req, res) {
+router.get("/api/getPublicDecks", async function (req, res) {
   try {
     const allPublicDecks = await Card.distinct("sets.set_name")
     // console.log(allPublicDecks[5])
@@ -51,27 +51,59 @@ router.get("/api/getPack/:name", async (req, res) => {
 });
 
 router.get("/api/listPacks", async (req, res) => {
-  var pack = []
+  var pack = [];
+  var limited = [];
   console.log("inside listpack");
   var uniques = await Card.distinct("sets.set_name", function (error, names) {
     if (error) {
-          console.log(error);
+      console.log(error);
     } else {
-    //   console.log(names);
-        console.log(names[5])
-        var limited = []
-        limited.push(names[5], names[583], names[235], names[654])
-        console.log(limited);
-        limited.forEach(async function(element) {
-          console.log('in loop', element)
-          var temp = await Card.find({ "sets.set_name": element });
-          pack.push(temp);
-          console.log("current pack is ", temp);
-        });
-        }
-  })
-  return res.send(pack);
+      // console.log(names[5])
+      limited.push(names[583], names[235], names[654]);
+      // console.log("about to leave first await, limited is", limited.length);
+      }
+  });
+  // console.log('bout to go to limited')
+
+  // Promise.all(limited.map()).then(allCards => {
+  //   return res.json(allCards);
+  // });
+  // })
+  for (let i = 0; i < limited.length; i+= 1) {
+    console.log(limited.length, i);
+    const currentSet = await Card.find({ "sets.set_name": limited[i] })
+    pack.push(currentSet);
+    console.log(pack.length);
+    // .then((cards) => {
+    //   pack.push(cards);
+    //   console.log(pack[i])
+    //   console.log(pack.length, 'end of then')
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // })
+  }
+  return res.json(pack);
 });
+    //   limited.forEach(async function(element) {
+    // var temp = Card.find({ "sets.set_name": element })
+    // .then((element) => {
+    //   // console.log('in loop', element)
+    //   pack.push(element);
+    //   console.log('that was element')
+    //   console.log('pack is ',pack.length)
+    //   console.log('limited is ',limited.length)
+    // return res.json(pack)
+    // })
+    // .catch((err) => {
+    //   console.log(err)
+    // });
+
+
+  // console.log('length of limited is ', limited.length)
+  // console.log("length of pack is ", pack.length);
+  // console.log(pack);
+// });
 
 // router.post("/api/setPack/:name", async (req, res) => {
 // console.log("inside setPack");
@@ -87,15 +119,5 @@ router.get("/api/listPacks", async (req, res) => {
 //     });
 // });
 
-// router.get('/express_backend', (req, res) => {
-//     res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
-// })
 
-//.then(async (unique_decks) => {
-//   console.log(unique_decks);
-//   return res.json(unique_decks);
-// })
-// .catch((err) => {
-//   console.log(err);
-// })
 module.exports = router;

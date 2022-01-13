@@ -40,17 +40,19 @@ var MAX_PLAYERS = 8
 
 // let interval;
 
-// io.on("connection", (socket) => {
-//   console.log("New client connected");
-//   if (interval) {
-//     clearInterval(interval);
-//   }
-//   interval = setInterval(() => getApiAndEmit(socket), 1000);
-//   socket.on("disconnect", () => {
-//     console.log("Client disconnected");
-//     clearInterval(interval);
-//   });
-// });
+io.on("connection", (socket) => {
+  console.log("New client connected, ", socket.id);
+  socket.emit("connected", socket.id);
+  // if (interval) {
+  //   clearInterval(interval);
+  // }
+  // interval = setInterval(() => getApiAndEmit(socket), 1000);
+  socket.on("disconnect", () => {
+    console.log("Client disconnected, ", socket.id);
+    socket.emit("disconnected", socket.id);
+
+  });
+});
 
 // const getApiAndEmit = (socket) => {
 //   const response = new Date();
