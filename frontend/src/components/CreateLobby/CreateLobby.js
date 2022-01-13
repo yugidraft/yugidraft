@@ -9,7 +9,7 @@ function handleCreateLobby({ e, history, set, setError, setLoading }) {
   setLoading("createLobby");
 
   axios
-    .post(`3001/api/getSet`, { set })
+    .post(`3001/api/getPack`, { set })
     .then((res) => {
       if (res.data) {
         setLoading(false);
@@ -49,7 +49,7 @@ function createRandomRoom({ history, set, setError, setLoading }) {
 
   // check server to make sure random room doesn't already exist
   axios
-    .post(`${PORT}/api/checkAvailableRooms`, { roomName: random })
+    .post(`3001/api/checkAvailableRooms`, { roomName: random })
     .then((res) => {
       setLoading(false);
       setError("");
@@ -86,7 +86,7 @@ const CreateLobby = () => {
   const [error, setError] = useState("");
   const [publicSets, setPublicSets] = useState([]);
   useEffect(() => {
-    axios.get(`${PORT}/api/getApprovedPublicSets`).then((res) => {
+    axios.get(`3001/api/getApprovedPublicPacks`).then((res) => {
       setPublicSets(res.data);
     });
   }, []);

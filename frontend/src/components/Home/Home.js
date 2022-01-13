@@ -1,4 +1,5 @@
 import CreateLobby from "../CreateLobby/CreateLobby";
+import React from "react";
 
 function Home() {
   return (
