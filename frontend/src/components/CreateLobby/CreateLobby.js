@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { PORT } from ".../server.js";
+// import { PORT } from ".../server.js";
 import styled from "styled-components";
 
 function handleCreateLobby({ e, history, set, setError, setLoading }) {
@@ -9,7 +9,7 @@ function handleCreateLobby({ e, history, set, setError, setLoading }) {
   setLoading("createLobby");
 
   axios
-    .post(`${PORT}/api/getSet`, { set })
+    .post(`3001/api/getSet`, { set })
     .then((res) => {
       if (res.data) {
         setLoading(false);

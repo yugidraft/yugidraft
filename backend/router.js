@@ -18,7 +18,7 @@ router.post("/api/checkAvailableRooms", function (req, res) {
   return res.end();
 });
 
-router.get("/api/getPublicDecks", async function (req, res) {
+router.get("/api/getPacks", async function (req, res) {
   try {
     const allPublicDecks = await Card.distinct("sets.set_name")
     // console.log(allPublicDecks[5])
@@ -39,8 +39,8 @@ router.get("/api/getPublicDecks", async function (req, res) {
 
 router.get("/api/getPack/:name", async (req, res) => {
   console.log("made it in");
-  const deckName = req.params.name;
-  const search = await Card.find({ "sets.set_name": deckName })
+  const packName = req.params.name;
+  const search = await Card.find({ "sets.set_name": packName })
     .then(async (cards) => {
       // console.log(cards);
       return res.json(cards);
@@ -52,7 +52,7 @@ router.get("/api/getPack/:name", async (req, res) => {
 
 router.get("/api/listPacks", async (req, res) => {
   var pack = []
-  console.log("inside listdeck");
+  console.log("inside listpack");
   var uniques = await Card.distinct("sets.set_name", function (error, names) {
     if (error) {
           console.log(error);
@@ -73,23 +73,23 @@ router.get("/api/listPacks", async (req, res) => {
   return res.send(pack);
 });
 
-router.post("/api/setPack/:name", async (req, res) => {
-console.log("inside setPack");
-  const packName = req.params.name;
-  const search = await Card.find({ "sets.set_name": packName })
-    .then(async (cards) => {
-      // console.log(cards);
-      User.deck.push(cards);
-      return res.json(cards);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+// router.post("/api/setPack/:name", async (req, res) => {
+// console.log("inside setPack");
+//   const packName = req.params.name;
+//   const search = await Card.find({ "sets.set_name": packName })
+//     .then(async (cards) => {
+//       // console.log(cards);
+//       User.deck.push(cards);
+//       return res.json(cards);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
-router.get('/express_backend', (req, res) => {
-    res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
-})
+// router.get('/express_backend', (req, res) => {
+//     res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
+// })
 
 //.then(async (unique_decks) => {
 //   console.log(unique_decks);
