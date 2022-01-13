@@ -161,7 +161,7 @@ const CreateLobby = () => {
         <PrivacyCheck
           setIsPrivate={setIsPrivate}
           title="game"
-          toastText="If checked, this game will not be listed under public games."
+          toastText="If checked, this game will not be listed under public lobbies."
         />
         <Flex>
           <WhiteButton to="/">Back</WhiteButton>
@@ -175,8 +175,6 @@ const CreateLobby = () => {
 const GlobalStyle = createGlobalStyle`
   html {
     position: static;
-    height: 100%;
-    min-height: auto;
     overflow: visible;
   }
   body {
@@ -188,7 +186,7 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: auto;
+    height: 95vh;
   }
   button,
   input {
