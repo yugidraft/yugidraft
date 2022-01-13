@@ -19,28 +19,62 @@ router.post("/api/checkAvailableRooms", function (req, res) {
 });
 
 router.get("/api/getPublicDecks", async function (req, res) {
-  try {
-    const allPublicDecks = await Card.distinct("sets.set_name")
-    // console.log(allPublicDecks[5])
-    // var limited = []
-    // limited.push(allPublicDecks[5], allPublicDecks[583], allPublicDecks[235], allPublicDecks[654])
-    // console.log(limited)
-    return res.send(allPublicDecks);
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(500)
-      .send(
-        "Error: There was an issue retrieving public decks...",
-        err.message
-      );
-  }
+  const temp = ''
+  var decks = [{
+    isPublic: true,
+    hasSFWCards: false,
+    hasNSFWCards: false,
+    blackList: [],
+    name: '',
+    approved: true,
+    isNSFW: false
+    }];
+    const allPublicDecks = await Card.distinct("sets.set_name");
+    // console.log(decks[0]);
+    Card.findOne({ "sets.set_name": allPublicDecks[0] }, function (err, cards) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        const temp = cards.sets[0].set_name;
+        // console.log(cards.sets);
+        console.log('name is', decks[0].name, cards.sets[0].set_name);
+        decks[0].name = cards.sets[0].set_name;
+        return res.send(decks)
+      }
+    })
 });
+    //       if (err) {
+  //         console.log(err);
+  //       }
+  //       else {
+  //         decks[i].name = cards.set.set_name;
+  // try {
+  //   const allPublicDecks = await Card.distinct("sets.set_name")
+  //   console.log(allPublicDecks[1]);
+  //   for (i = 0; i < allPublicDecks.length; i+= 1) {
 
-router.get("/api/getPack/:name", async (req, res) => {
+
+  // async function getPublicDecks() {
+
+  // }
+  //   // var limited = []
+  //   // limited.push(allPublicDecks[5], allPublicDecks[583], allPublicDecks[235], allPublicDecks[654])
+  //   // console.log(limited)
+  //   return res.send(allPublicDecks);
+  // } catch (err) {
+  //   console.error(err);
+  //   return res
+  //     .status(500)
+  //     .send(
+  //       "Error: There was an issue retrieving public decks...",
+  //       err.message
+  //     );
+  // }
+router.get("/api/getDeck/:name", async (req, res) => {
   console.log("made it in");
-  const packName = req.params.name;
-  const search = await Card.find({ "sets.set_name": packName })
+  const deckName = req.params.name;
+  const search = await Card.find({ "sets.set_name": deckName })
     .then(async (cards) => {
       // console.log(cards);
       return res.json(cards);
@@ -50,30 +84,31 @@ router.get("/api/getPack/:name", async (req, res) => {
     });
 });
 
-router.get("/api/listPacks", async (req, res) => {
-  var pack = [];
+router.get("/api/listDecks", async (req, res) => {
+  var deck = [];
   var limited = [];
-  console.log("inside listpack");
+  console.log("inside list decks");
   var uniques = await Card.distinct("sets.set_name", function (error, names) {
     if (error) {
       console.log(error);
     } else {
       // console.log(names[5])
-      limited.push(names[583], names[235], names[654]);
-      // console.log("about to leave first await, limited is", limited.length);
-      }
+      limited.push(names[5], names[583], names[235], names[654]);
+      // console.log(limited)
+    }
   });
-  // console.log('bout to go to limited')
 
-  // Promise.all(limited.map()).then(allCards => {
-  //   return res.json(allCards);
-  // });
-  // })
   for (let i = 0; i < limited.length; i+= 1) {
     console.log(limited.length, i);
+    console.log(deck.length);
+
     const currentSet = await Card.find({ "sets.set_name": limited[i] })
-    pack.push(currentSet);
-    console.log(pack.length);
+    deck.push(currentSet);
+    console.log(deck.length);
+  return res.json(deck);
+  };
+});
+
     // .then((cards) => {
     //   pack.push(cards);
     //   console.log(pack[i])
@@ -82,9 +117,7 @@ router.get("/api/listPacks", async (req, res) => {
     // .catch((err) => {
     //   console.log(err);
     // })
-  }
-  return res.json(pack);
-});
+
     //   limited.forEach(async function(element) {
     // var temp = Card.find({ "sets.set_name": element })
     // .then((element) => {

@@ -104,7 +104,6 @@ io.on("connection", (socket) => {
 // // Middleware
 // app.use(morgan('common'))
 // app.use(helmet())
-// // app.use(cors({ origin: '*' }))
 // app.use(express.urlencoded({ extended: true })); // Handling form data
 // app.use(express.json()); // Handling JSON data
 // // app.use(compression())
