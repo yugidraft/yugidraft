@@ -1,4 +1,4 @@
-function Game() {
+function Lobby() {
   this.players = [];
   this.submittedCards = [];
 }
@@ -37,4 +37,4 @@ function Game() {
 //         console.log(err.message);
 //     })
 // }
-module.exports = { Game };
+module.exports = { Lobby };

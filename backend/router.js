@@ -80,29 +80,38 @@ router.get("/api/getPublicDecks", async function (req, res) {
 });
 
 router.post("/api/getInitialCards", async function (req, res) {
-  const { deckName, roomId } = req.body;
+  // const { deckName, roomId } = req.body;
+  // console.log(req.body);
+  const deckName = "Absolute Powerforce";
+  const roomId = "3zauu";
 
-  console.log(
-    "hitting getInitialCards route",
-    server.rooms[roomId] ? server.rooms[roomId].blackCards.length : "blah"
-  );
-  if (server.rooms[roomId]) {
-    if (server.rooms[roomId].initialCardsAreSet) {
-      return res.end();
-    }
+  let cards = [];
 
-    server.rooms[roomId].initialCardsAreSet = true;
-    console.log("initial cards are set!");
+  tempCards = await Card.find({ "sets.set_name": deckName })
+
+  for (i = 0; i < tempCards.length; i += 1) {
+    cards.push(tempCards[i]);
   }
+  return res.status(200).send(cards);
+});
+  // console.log(
+  //   "hitting getInitialCards route",
+  //   server.rooms[roomId] ? server.rooms[roomId].blackCards.length : "blah"
+  // );
+  // if (server.rooms[roomId]) {
+  //   if (server.rooms[roomId].initialCardsAreSet) {
+  //     return res.end();
+  //   }
 
-  try {
-    let totalCards = [];
+  //   server.rooms[roomId].initialCardsAreSet = true;
+  //   console.log("initial cards are set!");
 
-    if (deckName) {
-      const { hasSFWCards, hasNSFWCards } = await getDeck(deckName);
-      const cardsFromDeck = await getCardsFromDeck(deckName);
-      totalCards.push(...cardsFromDeck);
-    }
+  // try {
+  //   let totalCards = [];
+  //   if (deckName) {
+  //     const cardsFromDeck = await getCardsFromDeck(deckName);
+  //     totalCards.push(...cardsFromDeck);
+    // }
     //   if (hasSFWCards) {
     //     const SFWCards = await getCardsFromDeck("safe-for-work");
     //     totalCards.push(...SFWCards);
@@ -126,23 +135,23 @@ router.post("/api/getInitialCards", async function (req, res) {
 
     // just send back array of text for each
     // shuffle them first
-    return res.status(200).send(totalCards);
-  } catch (err) {
-    return res
-      .status(500)
-      .send(
-        "Error: There was an issue retrieving initial cards from this deck...",
-        err.message
-      );
-  }
-});
+//     return res.status(200).send(totalCards);
+//   } catch (err) {
+//     return res
+//       .status(500)
+//       .send(
+//         "Error: There was an issue retrieving initial cards from this deck...",
+//         err.message
+//       );
+//   }
+// });
 
 router.get("/api/getCardsFromDeck/:name", async function (req, res) {
   const deckName = req.params.name;
 
   try {
     const cardsFromDeck = await getCardsFromDeck(deckName);
-    return res.send(cardsFromDeck);
+    return res.status(200).send(cardsFromDeck);
   } catch (err) {
     return res
       .status(500)
@@ -181,7 +190,7 @@ router.get("/api/listDecks", async (req, res) => {
     //   console.log(error);
     // } else {
     //   // console.log(names[5]), names[583], names[235], names[654]
-      limited.push(uniques[8]);
+      limited.push(uniques[4]);
     //   // console.log(limited)
     // }
   // });

@@ -46,7 +46,7 @@ db.once("open", () => {
 
 app.use("/", router);
 
-var rooms = {};
+var rooms = { roomId: "3zauu" };
 
 app.use(bodyParser.json());
 var MAX_PLAYERS = 8
@@ -67,7 +67,7 @@ io.on("connection", function (socket) {
 
     // if the room doesnt already exist, add to the rooms object
     if (!rooms[roomId]) {
-      rooms[roomId] = new Game();
+      rooms[roomId] = new Lobby();
     }
 
     // Add roomId to socket object

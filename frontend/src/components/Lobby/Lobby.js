@@ -6,10 +6,19 @@ import { SERVER_URL } from '../../constants'
 const Lobby = () => {
   const [pack, setPack] = useState([])
 
+  // this.roomId = this.props.location.pathname.replace("/g/", "");
+//  const deckQueryString = queryString.parse(this.props.location.search).deck;
   useEffect(() => {
-    axios.post(`${SERVER_URL}/api/getInitialCards`).then((res) => {
-      setPack(res.data);
-    });
+    axios
+      .post(`${SERVER_URL}/api/getInitialCards`, {
+        deckName: "2013 Collectible Tins Wave 2",
+        roomId: "mfqsc",
+      })
+      .then((res) => {
+
+        setPack(res.data);
+      });
+
   }, []);
 
   return (
@@ -25,11 +34,8 @@ const Lobby = () => {
           ))}
         </div>
       )}
-
-
     </>
   )
 
 }
-
 export default Lobby
