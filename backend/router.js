@@ -3,6 +3,7 @@ const express = require("express");
 const server = require("./server");
 const User = require("./models/user");
 const Card = require("./models/card");
+const Deck = require("./models/deck");
 const { getDeck } = require("./models/deck");
 
 const router = express.Router();
@@ -23,30 +24,32 @@ router.post("/api/checkAvailableRooms", function (req, res) {
 
 router.get("/api/getPublicDecks", async function (req, res) {
   const temp = ''
-  var decks = [{
-    isPublic: true,
-    hasSFWCards: false,
-    hasNSFWCards: false,
-    blackList: [],
-    name: '',
-    approved: true,
-    isNSFW: false
-    }];
+  // var decks = [{
+  //   isPublic: true,
+  //   hasSFWCards: false,
+  //   hasNSFWCards: false,
+  //   blackList: [],
+  //   name: '',
+  //   approved: true,
+  //   isNSFW: false
+  const returnedDeck = await Deck.find({ isPublic: true });
+  //   }];
+  // const DeckNames = await Deck.distinct("name").lean().exec();
+  console.log("DeckNames ", returnedDeck[0]);
   const allPublicDecks = await Card.distinct("sets.set_name").lean().exec();
   // console.log(decks[0]);
-  for (i = 0; i < allPublicDecks.length; i += 1) {
-    var deckName = allPublicDecks[i];
-    console.log(deckName);
-    decks[i] = {
-        isPublic: true,
-        hasSFWCards: false,
-        hasNSFWCards: false,
-        blackList: [],
-        name: deckName,
-        approved: true,
-        isNSFW: false,
-    };
-  }
+  // for (i = 0; i < allPublicDecks.length; i += 1) {
+  //   var deckName = allPublicDecks[i];
+  //   decks[i] = {
+  //       isPublic: true,
+  //       hasSFWCards: false,
+  //       hasNSFWCards: false,
+  //       blackList: [],
+  //       name: deckName,
+  //       approved: true,
+  //       isNSFW: false,
+  //   };
+  // }
   // Card.findOne({ "sets.set_name": allPublicDecks[0] }, function (err, cards) {
   //   if (err) {
   //     console.log(err);
@@ -59,7 +62,7 @@ router.get("/api/getPublicDecks", async function (req, res) {
   //     console.log(decks[0])
 
   //   }
-  return res.send(decks);
+  return res.send(returnedDeck);
 
 
 });
@@ -69,8 +72,8 @@ router.post("/api/getDeck", async function (req, res) {
   const deckName = req.body;
   console.log(deckName);
   try {
-    const deckExists = await getDeck(deckName);
-    console.log({ deckExists });
+    const deckExists = await Deck.find({name : 'deckName'});
+    // console.log({ deckExists });
     if (deckExists) {
       return res.send("Deck exists!");
     } else {

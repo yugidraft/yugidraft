@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Card = require("./card");
 
 // Schema
-const deckSchema = new mongoose.Schema({
+const DeckSchema = new mongoose.Schema({
   name: String,
   isPublic: {
     type: Boolean,
@@ -18,7 +18,7 @@ const deckSchema = new mongoose.Schema({
   },
 });
 // Deck Class
-const Deck = mongoose.model("Deck", deckSchema);
+// const Deck = mongoose.model("Deck", DeckSchema);
 
 // Create a new Deck
 async function createDeck({ name, isPublic, hasSFWCards, hasNSFWCards }) {
@@ -68,7 +68,7 @@ async function getDeck(deckName) {
   }
 }
 
-module.exports.Deck = Deck;
 module.exports.createDeck = createDeck;
 // module.exports.getPublicDecks = getPublicDecks;
 module.exports.getDeck = getDeck;
+module.exports = mongoose.model("Deck", DeckSchema);
