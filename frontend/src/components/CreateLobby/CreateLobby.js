@@ -79,7 +79,6 @@ function createRandomRoom({
 
       if (!res.data) {
         history.push(`/l/${random}${getQueries({ deck, isPrivate })}`);
-
       } else {
         createRandomRoom({
           history,
@@ -111,7 +110,8 @@ const CreateLobby = () => {
   const [error, setError] = useState("");
   const [publicDecks, setPublicDecks] = useState([]);
   useEffect(() => {
-    axios.get(`${SERVER_URL}/api/getPublicDecks`).then((res) => {
+    axios.post(`${SERVER_URL}/api/getPublicDecks`).then((res) => {
+      console.log(res.data);
       setPublicDecks(res.data);
     });
   }, []);

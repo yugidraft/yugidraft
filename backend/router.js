@@ -34,35 +34,39 @@ router.post("/api/checkAvailableRooms", function (req, res) {
 //   }
 // });
 
-router.get("/api/getPublicDecks", async function (req, res) {
+router.post("/api/getPublicDecks", async function (req, res) {
   const temp = ''
-  // var decks = [{
-  //   isPublic: true,
-  //   hasSFWCards: false,
-  //   hasNSFWCards: false,
-  //   blackList: [],
-  //   name: '',
-  //   approved: true,
-  //   isNSFW: false
-  const returnedDeck = await Deck.find({ isPublic: true });
+  var decks = [{
+    isPublic: true,
+    hasSFWCards: false,
+    hasNSFWCards: false,
+    blackList: [],
+    name: '',
+    approved: true,
+    isNSFW: false
+  }];
+  // const temp = []
+
+  // const returnedDeck = await Deck.find({ name: "Dark Neostorm" });
+  // console.log(returnedDeck[0].name);
   //   }];
   // const DeckNames = await Deck.distinct("name").lean().exec();
   // console.log("DeckNames ", returnedDeck[0]);
   // console.log(returnedDeck[0].name);
-  // const allPublicDecks = await Card.distinct("sets.set_name").lean().exec();
-  // console.log(decks[0]);
-  // for (i = 0; i < allPublicDecks.length; i += 1) {
-  //   var deckName = allPublicDecks[i];
-  //   decks[i] = {
-  //       isPublic: true,
-  //       hasSFWCards: false,
-  //       hasNSFWCards: false,
-  //       blackList: [],
-  //       name: deckName,
-  //       approved: true,
-  //       isNSFW: false,
-  //   };
-  // }
+  const allPublicDecks = await Card.distinct("sets.set_name").lean().exec();
+  console.log(decks[0]);
+  for (i = 0; i < allPublicDecks.length; i += 1) {
+    var deckName = allPublicDecks[i];
+    decks[i] = {
+        isPublic: true,
+        hasSFWCards: false,
+        hasNSFWCards: false,
+        blackList: [],
+        name: deckName,
+        approved: true,
+        isNSFW: false,
+    };
+  }
   // Card.findOne({ "sets.set_name": allPublicDecks[0] }, function (err, cards) {
   //   if (err) {
   //     console.log(err);
@@ -75,17 +79,18 @@ router.get("/api/getPublicDecks", async function (req, res) {
   //     console.log(decks[0])
 
   //   }
-  return res.status(200).send(returnedDeck);
+  return res.status(200).send(decks);
 
 
 });
 
-router.get("/api/getInitialCards/:name", async function (req, res) {
-  // const { deckName, roomId } = req.body;
+router.post("/api/getInitialCards", async function (req, res) {
+  // const  deckName  = req.query
   // console.log(req.body);
-  const deckName = req.params.name;
-  console.log('params name is', req.params.name);
-  const roomId = "3zauu";
+  console.log(req.body);
+  const deckName = '2013 Collectible Tins Wave 2';
+  // console.log('params name is', req.params.name);
+  // const roomId = "3zauu";
 
   let cards = [];
 
