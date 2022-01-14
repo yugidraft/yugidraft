@@ -47,7 +47,8 @@ router.get("/api/getPublicDecks", async function (req, res) {
   const returnedDeck = await Deck.find({ isPublic: true });
   //   }];
   // const DeckNames = await Deck.distinct("name").lean().exec();
-  console.log("DeckNames ", returnedDeck[0]);
+  // console.log("DeckNames ", returnedDeck[0]);
+  // console.log(returnedDeck[0].name);
   // const allPublicDecks = await Card.distinct("sets.set_name").lean().exec();
   // console.log(decks[0]);
   // for (i = 0; i < allPublicDecks.length; i += 1) {
@@ -79,19 +80,28 @@ router.get("/api/getPublicDecks", async function (req, res) {
 
 });
 
-router.post("/api/getInitialCards", async function (req, res) {
+router.get("/api/getInitialCards/:name", async function (req, res) {
   // const { deckName, roomId } = req.body;
   // console.log(req.body);
-  const deckName = "Absolute Powerforce";
+  const deckName = req.params.name;
+  console.log('params name is', req.params.name);
   const roomId = "3zauu";
 
   let cards = [];
 
-  tempCards = await Card.find({ "sets.set_name": deckName })
-
-  for (i = 0; i < tempCards.length; i += 1) {
-    cards.push(tempCards[i]);
+  tempCards = await Card.find({ "sets.set_name": deckName });
+  // Returns a random integer from 0 to 9:
+  for (i = 0; i < 9; i += 1){
+    if (cards.length < 9) {
+        var index = Math.floor(Math.random() * tempCards.length-1);
+        cards.push(tempCards[index]);
+    }
   }
+  // var numberofCards = Math.floor(Math.random() * tempCards.length-1);
+  // console.log(numberofCards);
+  // for (i = 0; i < 9; i += 1) {
+  //   cards.push(tempCards[i]);
+  // }
   return res.status(200).send(cards);
 });
   // console.log(
