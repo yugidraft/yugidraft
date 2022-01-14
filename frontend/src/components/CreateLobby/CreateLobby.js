@@ -73,6 +73,7 @@ function createRandomRoom({
   axios
     .post(`${SERVER_URL}/api/checkAvailableRooms`, { roomName: random })
     .then((res) => {
+      console.log('were in here', res)
       setLoading(false);
       setError("");
 
@@ -135,7 +136,7 @@ const CreateLobby = () => {
         </Subtitle>
         {publicDecks && (
           <List>
-            {publicDecks.map(({ name }) => (
+            {publicDecks.map(({ name, isNSFW }) => (
               <ListItem key={name}>
                 <PublicDeckButton
                   type="button"

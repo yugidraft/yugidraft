@@ -7,12 +7,13 @@ const { getDeck } = require("./models/deck");
 
 const router = express.Router();
 
-router.get('/', async function (req, res) {
-    return res.send("Hello World!");
+// router.get('/', async function (req, res) {
+//     return res.send("Hello World!");
 
-});
+// });
 
 router.post("/api/checkAvailableRooms", function (req, res) {
+  console.log('req body whole', req.body)
   if (Object.keys(server.rooms).includes(req.body.roomName)) {
     return res.send("game exists");
   }
@@ -31,20 +32,70 @@ router.get("/api/getPublicDecks", async function (req, res) {
     approved: true,
     isNSFW: false
     }];
-    const allPublicDecks = await Card.distinct("sets.set_name");
-    // console.log(decks[0]);
-    Card.findOne({ "sets.set_name": allPublicDecks[0] }, function (err, cards) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        const temp = cards.sets[0].set_name;
-        // console.log(cards.sets);
-        console.log('name is', decks[0].name, cards.sets[0].set_name);
-        decks[0].name = cards.sets[0].set_name;
-        return res.send(decks)
-      }
-    })
+  const allPublicDecks = await Card.distinct("sets.set_name").lean().exec();
+  // console.log(decks[0]);
+  Card.findOne({ "sets.set_name": allPublicDecks[0] }, function (err, cards) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      const temp = cards.sets[0].set_name;
+      // console.log(cards.sets);
+      console.log('name is', decks[0].name, cards.sets[0].set_name);
+      decks[0].name = cards.sets[0].set_name;
+      console.log(decks[0])
+
+    }
+  return res.send(decks);
+
+  })
+
+});
+
+
+router.post("/api/getDeck", async function (req, res) {
+  const deckName = req.body;
+  console.log(deckName);
+  try {
+    const deckExists = await getDeck(deckName);
+    console.log({ deckExists });
+    if (deckExists) {
+      return res.send("Deck exists!");
+    } else {
+      return res.status(500).send("Error: This deck doesn't exist...");
+    }
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(500)
+      .send("Error: There was an issue retrieving this deck...", err.message);
+  }
+});
+
+router.get("/api/listDecks", async (req, res) => {
+  var deck = [];
+  var limited = [];
+  console.log("inside list decks");
+  var uniques = await Card.distinct("sets.set_name").lean().exec()
+    // if (error) {function (error, names) {
+    //   console.log(error);
+    // } else {
+    //   // console.log(names[5]), names[583], names[235], names[654]
+      limited.push(uniques[8]);
+    //   // console.log(limited)
+    // }
+  // });
+
+  for (let i = 0; i < limited.length; i += 1) {
+    console.log(limited.length, i);
+    console.log(deck.length);
+
+    const currentSet = await Card.find({ "sets.set_name": limited[i] });
+    deck.push(currentSet);
+    // console.log(deck);
+  }
+  return res.json(deck);
+
 });
     //       if (err) {
   //         console.log(err);
@@ -86,30 +137,7 @@ router.get("/api/getPublicDecks", async function (req, res) {
 //     });
 // });
 
-router.get("/api/listDecks", async (req, res) => {
-  var deck = [];
-  var limited = [];
-  console.log("inside list decks");
-  var uniques = await Card.distinct("sets.set_name", function (error, names) {
-    if (error) {
-      console.log(error);
-    } else {
-      // console.log(names[5])
-      limited.push(names[5], names[583], names[235], names[654]);
-      // console.log(limited)
-    }
-  });
 
-  for (let i = 0; i < limited.length; i+= 1) {
-    console.log(limited.length, i);
-    console.log(deck.length);
-
-    const currentSet = await Card.find({ "sets.set_name": limited[i] })
-    deck.push(currentSet);
-    console.log(deck.length);
-  return res.json(deck);
-  };
-});
 
     // .then((cards) => {
     //   pack.push(cards);
@@ -154,24 +182,7 @@ router.get("/api/listDecks", async (req, res) => {
 //     });
 // });
 
-router.post("/api/getDeck", async function (req, res) {
-  const deckName = req.body
-  console.log(deckName);
-  try {
-    const deckExists = await getDeck(deckName);
-    console.log({ deckExists });
-    if (deckExists) {
-      return res.send("Deck exists!");
-    } else {
-      return res.status(500).send("Error: This deck doesn't exist...");
-    }
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(500)
-      .send("Error: There was an issue retrieving this deck...", err.message);
-  }
-});
+
 
 
 module.exports = router;
