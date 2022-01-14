@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react'
-// import axios from 'axios'
+import axios from 'axios'
 import { SERVER_URL } from '../../constants'
 
 
 const Lobby = () => {
-  const [pack, setPack] = useState(null)
+  const [pack, setPack] = useState([])
 
-  async function fetchPack() {
-    const path = `${SERVER_URL}/`
-    const res = await fetch(path)
-    const json = await res.json()
+  // this.roomId = this.props.location.pathname.replace("/g/", "");
+//  const deckQueryString = queryString.parse(this.props.location.search).deck;
+  useEffect(() => {
+    axios
+      .post(`${SERVER_URL}/api/getInitialCards`, {
+        deckName: "2013 Collectible Tins Wave 2",
+        roomId: "mfqsc",
+      })
+      .then((res) => {
 
-    const img = json.img
-    const name = json.name
+        setPack(res.data);
+      });
 
-    setPack({
-      img,
-      name
-    })
-  }
+  }, []);
 
   return (
     <>
@@ -33,17 +34,8 @@ const Lobby = () => {
           ))}
         </div>
       )}
-      <form onSubmit={e => {
-        e.preventDefault()
-        fetchPack()
-      }}>
-        <button type="submit">open pack</button>
-      </form>
-
-
     </>
   )
 
 }
-
 export default Lobby
