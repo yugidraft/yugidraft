@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.post("/api/checkAvailableRooms", function (req, res) {
   console.log('req body whole', req.body)
-  if (Object.keys(server.rooms).includes(req.body.roomName)) {
+  if (Object.keys(server.rooms).includes(req.body)) {
     return res.send("game exists");
   }
 
@@ -34,21 +34,33 @@ router.get("/api/getPublicDecks", async function (req, res) {
     }];
   const allPublicDecks = await Card.distinct("sets.set_name").lean().exec();
   // console.log(decks[0]);
-  Card.findOne({ "sets.set_name": allPublicDecks[0] }, function (err, cards) {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      const temp = cards.sets[0].set_name;
-      // console.log(cards.sets);
-      console.log('name is', decks[0].name, cards.sets[0].set_name);
-      decks[0].name = cards.sets[0].set_name;
-      console.log(decks[0])
+  for (i = 0; i < allPublicDecks.length; i += 1) {
+    var deckName = allPublicDecks[i];
+    console.log(deckName);
+    decks[i] = {
+        isPublic: true,
+        hasSFWCards: false,
+        hasNSFWCards: false,
+        blackList: [],
+        name: deckName,
+        approved: true,
+        isNSFW: false,
+    };
+  }
+  // Card.findOne({ "sets.set_name": allPublicDecks[0] }, function (err, cards) {
+  //   if (err) {
+  //     console.log(err);
+  //   }
+  //   else {
+  //     const temp = cards.sets[0].set_name;
+  //     // console.log(cards.sets);
+  //     console.log('name is', decks[0].name, cards.sets[0].set_name);
+  //     decks[0].name = cards.sets[0].set_name;
+  //     console.log(decks[0])
 
-    }
+  //   }
   return res.send(decks);
 
-  })
 
 });
 

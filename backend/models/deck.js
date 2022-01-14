@@ -4,7 +4,10 @@ const Card = require("./card");
 // Schema
 const deckSchema = new mongoose.Schema({
   name: String,
-  isPublic: Boolean,
+  isPublic: {
+    type: Boolean,
+    default: true,
+  },
   hasSFWCards: {
     type: Boolean,
     default: false,
@@ -54,8 +57,8 @@ async function createDeck({ name, isPublic, hasSFWCards, hasNSFWCards }) {
 
 async function getDeck(deckName) {
   try {
-      console.log(deckName)
-    const deck = await Card.find({ "sets.set_name": deckName });
+    //   console.log(deckName)
+    const deck = await Deck.find({ "name": deckName });
     return deck;
   } catch (err) {
     console.error(
