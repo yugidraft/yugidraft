@@ -7,7 +7,7 @@ const Lobby = () => {
   const [pack, setPack] = useState([])
 
   useEffect(() => {
-    axios.get(`${SERVER_URL}/api/getInitialCards`).then((res) => {
+    axios.post(`${SERVER_URL}/api/getInitialCards`).then((res) => {
       setPack(res.data);
     });
   }, []);

@@ -4,7 +4,7 @@ const server = require("./server");
 const User = require("./models/user");
 const Card = require("./models/card");
 const Deck = require("./models/deck");
-const { getDeck } = require("./models/deck");
+const { getDeck, getPublicDecks } = require("./models/deck");
 
 const router = express.Router();
 
@@ -14,13 +14,25 @@ const router = express.Router();
 // });
 
 router.post("/api/checkAvailableRooms", function (req, res) {
-  console.log('req body whole', req.body)
   if (Object.keys(server.rooms).includes(req.body)) {
-    return res.send("game exists");
+    return res.status(500).send("game exists");
   }
 
   return res.end();
 });
+
+// router.get("/api/getPublicDecks", async function (req, res) {
+//   try {
+//     const allPublicDecks = await getPublicDecks();
+//     console.log(allPublicDecks.length);
+//     return res.status(200).send(allPublicDecks);
+//   } catch (err) {
+//     return res.status(500).send(
+//         "Error: There was an issue retrieving public decks...",
+//         err.message
+//       );
+//   }
+// });
 
 router.get("/api/getPublicDecks", async function (req, res) {
   const temp = ''
@@ -36,7 +48,7 @@ router.get("/api/getPublicDecks", async function (req, res) {
   //   }];
   // const DeckNames = await Deck.distinct("name").lean().exec();
   console.log("DeckNames ", returnedDeck[0]);
-  const allPublicDecks = await Card.distinct("sets.set_name").lean().exec();
+  // const allPublicDecks = await Card.distinct("sets.set_name").lean().exec();
   // console.log(decks[0]);
   // for (i = 0; i < allPublicDecks.length; i += 1) {
   //   var deckName = allPublicDecks[i];
@@ -62,11 +74,84 @@ router.get("/api/getPublicDecks", async function (req, res) {
   //     console.log(decks[0])
 
   //   }
-  return res.send(returnedDeck);
+  return res.status(200).send(returnedDeck);
 
 
 });
 
+router.post("/api/getInitialCards", async function (req, res) {
+  const { deckName, roomId } = req.body;
+
+  console.log(
+    "hitting getInitialCards route",
+    server.rooms[roomId] ? server.rooms[roomId].blackCards.length : "blah"
+  );
+  if (server.rooms[roomId]) {
+    if (server.rooms[roomId].initialCardsAreSet) {
+      return res.end();
+    }
+
+    server.rooms[roomId].initialCardsAreSet = true;
+    console.log("initial cards are set!");
+  }
+
+  try {
+    let totalCards = [];
+
+    if (deckName) {
+      const { hasSFWCards, hasNSFWCards } = await getDeck(deckName);
+      const cardsFromDeck = await getCardsFromDeck(deckName);
+      totalCards.push(...cardsFromDeck);
+    }
+    //   if (hasSFWCards) {
+    //     const SFWCards = await getCardsFromDeck("safe-for-work");
+    //     totalCards.push(...SFWCards);
+    //   }
+    //   if (hasNSFWCards) {
+    //     const NSFWCards = await getCardsFromDeck("not-safe-for-work");
+    //     totalCards.push(...NSFWCards);
+    //   }
+    // } else {
+    //   // if there's no deck query param, load SFW deck by default
+    //   const SFWCards = await getCardsFromDeck("safe-for-work");
+    //   totalCards.push(...SFWCards);
+    // }
+
+    // const blackCards = shuffle(
+    //   totalCards.filter(({ type }) => type === "black").map(({ text }) => text)
+    // );
+    // const whiteCards = shuffle(
+    //   totalCards.filter(({ type }) => type === "white").map(({ text }) => text)
+    // );
+
+    // just send back array of text for each
+    // shuffle them first
+    return res.status(200).send(totalCards);
+  } catch (err) {
+    return res
+      .status(500)
+      .send(
+        "Error: There was an issue retrieving initial cards from this deck...",
+        err.message
+      );
+  }
+});
+
+router.get("/api/getCardsFromDeck/:name", async function (req, res) {
+  const deckName = req.params.name;
+
+  try {
+    const cardsFromDeck = await getCardsFromDeck(deckName);
+    return res.send(cardsFromDeck);
+  } catch (err) {
+    return res
+      .status(500)
+      .send(
+        "Error: There was an issue retrieving cards from the deck...",
+        err.message
+      );
+  }
+});
 
 router.post("/api/getDeck", async function (req, res) {
   const deckName = req.body;

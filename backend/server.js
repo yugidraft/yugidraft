@@ -2,18 +2,15 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 var app = require('express')();
 const bodyParser = require("body-parser");
-app.use(cors(
-  {
-  "origin": "*",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "preflightContinue": false,
-  "optionsSuccessStatus": 204
-  }
-));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 // const http = require("http");
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-const router = require("./router");
+const router = require("./router")
 // const { Server } = require("socket.io");
 // const io = new Server(server);
 // const app = require("express")();
@@ -25,9 +22,15 @@ const router = require("./router");
 // const morgan = require('morgan') // Request logging
 // const compression = require('compression') // GZIP middleware for compressing responses
 // require('dotenv').config()
-
+//
+//   {
+//   "origin": "*",
+//   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+//   "preflightContinue": false,
+//   "optionsSuccessStatus": 204
+//   }
+// )
 // App
-app.use("/", router);
 
 // Database connection
 const DB_URI = "mongodb://localhost:27017/yugidraft";
@@ -40,6 +43,9 @@ db.on("error", (err) => {
 db.once("open", () => {
   console.log("Connected to DB");
 });
+
+app.use("/", router);
+
 var rooms = {};
 
 app.use(bodyParser.json());

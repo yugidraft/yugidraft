@@ -43,17 +43,17 @@ async function createDeck({ name, isPublic, hasSFWCards, hasNSFWCards }) {
 //   isPublic: true,
 // })
 
-// async function getPublicDecks() {
-//   try {
-//     const publicDecks = await Deck.find({ isPublic: true });
-//     return publicDecks;
-//   } catch (err) {
-//     console.error(
-//       "There was an issue trying to access public decks: ",
-//       err.message
-//     );
-//   }
-// }
+async function getPublicDecks() {
+  try {
+    const publicDecks = await Deck.find({ isPublic: true });
+    return publicDecks;
+  } catch (err) {
+    console.error(
+      "There was an issue trying to access public decks: ",
+      err.message
+    );
+  }
+}
 
 async function getDeck(deckName) {
   try {
@@ -69,6 +69,6 @@ async function getDeck(deckName) {
 }
 
 module.exports.createDeck = createDeck;
-// module.exports.getPublicDecks = getPublicDecks;
+module.exports.getPublicDecks = getPublicDecks;
 module.exports.getDeck = getDeck;
 module.exports = mongoose.model("Deck", DeckSchema);
