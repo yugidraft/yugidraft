@@ -14,7 +14,7 @@ function handleCreateLobby({
   isPrivate,
 }) {
   e.preventDefault();
-  setLoading("createGame");
+  setLoading("createLobby");
 
   axios
     .post(`${SERVER_URL}/api/getDeck`, { deck })
@@ -136,7 +136,7 @@ const CreateLobby = () => {
         </Subtitle>
         {publicDecks && (
           <List>
-            {publicDecks.map(({ name, isNSFW }) => (
+            {publicDecks.map(({ name }) => (
               <ListItem key={name}>
                 <PublicDeckButton
                   type="button"
