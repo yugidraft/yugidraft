@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { SERVER_URL } from '../../constants'
 import styled, { createGlobalStyle } from 'styled-components'
-import { saveAs } from 'file-saver';
 import FileSaver from 'file-saver';
 
 const Lobby = () => {
@@ -17,7 +16,8 @@ const Lobby = () => {
   }
 
   const handleDownload = () => {
-    var blob = new Blob([JSON.stringify(cardList)], {type: "text/plain;charset=utf-8"});
+    const deck = Object.values(cardList)
+    var blob = new Blob([JSON.stringify(deck)], {type: "text/plain;charset=utf-8"});
     FileSaver.saveAs(blob, "deck.txt");
   }
 
@@ -57,7 +57,7 @@ const Lobby = () => {
             </ListItem>
           ))}
         </List>
-        <OrangeButton onClick={() => handleDownload()}>Download</OrangeButton>
+        <Button onClick={() => handleDownload()}>Download</Button>
       </Container>
     </>
   )
@@ -71,18 +71,19 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     text-align: center;
-    background: #000;
+    background: linear-gradient(129deg, rgba(14,17,40,1) 0%, rgba(40,9,19,1) 100%);
     border: 1em solid;
-    border-image: linear-gradient(90deg,rgb(64,224,208),rgb(255,140,0),rgb(255,0,128) ) 1;
+    border-image: linear-gradient(130deg, rgb(50,63,152), rgb(246,224,105), rgb(248,54,116) ) 1;
     padding: 2em;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100vh;
+    height: 88vh;
   }
 `;
 
 const Container = styled.div`
+  margin: 20px;
   display: grid;
   grid-template-columns: 30% 30% 10% 25%;
   grid-template-rows: auto;
@@ -124,7 +125,7 @@ const CardFlex = styled.div`
   align-items: center;
   flex-wrap: wrap;
   flex-direction: row;
-  height: 80vh;
+  height: 70vh;
   overflow: scroll;
 `;
 
@@ -135,8 +136,8 @@ const Flex = styled.div`
   justify-content: center;
   flex-direction: column;
   border: 3px solid;
-  border-image: linear-gradient(90deg,rgb(255,0,128),rgb(255,140,0),rgb(64,224,208) ) 1;
-`;
+  border-image: linear-gradient(130deg, rgb(248,54,116), rgb(246,224,105), rgb(50,63,152) ) 1;
+  `;
 
 const Image = styled.img`
   max-width: 250px;
@@ -152,7 +153,7 @@ const Subtitle = styled.p`
   color: #fff;
 `;
 
-const OrangeButton = styled.button`
+const Button = styled.button`
   grid-area: d;
   background: rgb(64, 224, 208);
   appearance: none;

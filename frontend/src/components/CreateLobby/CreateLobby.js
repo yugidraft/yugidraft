@@ -182,9 +182,9 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     text-align: center;
-    background: #000;
+    background: linear-gradient(129deg, rgba(14,17,40,1) 0%, rgba(40,9,19,1) 100%);
     border: 1em solid;
-    border-image: linear-gradient(90deg,rgb(64,224,208),rgb(255,140,0),rgb(255,0,128) ) 1;
+    border-image: linear-gradient(130deg, rgb(50,63,152), rgb(246,224,105), rgb(248,54,116) ) 1;
     padding: 2em;
     display: flex;
     flex-direction: column;
@@ -294,7 +294,7 @@ const ErrorText = styled.p`
 
 const Wrapper = styled.div`
   min-height: 100%;
-  background: #000;
+  background: linear-gradient(129deg, rgba(14,17,40,1) 0%, rgba(40,9,19,1) 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
