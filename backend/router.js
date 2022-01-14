@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.post("/api/checkAvailableRooms", function (req, res) {
   console.log('req body whole', req.body)
-  if (Object.keys(server.rooms).includes(req.body.roomName)) {
+  if (Object.keys(server.rooms).includes(req.body)) {
     return res.send("game exists");
   }
 
