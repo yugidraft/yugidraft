@@ -67,7 +67,7 @@ function createRandomRoom({
   const random = (
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15)
-  ).substr(0, 5);
+  ).substring(0, 5);
 
   // check server to make sure random room doesn't already exist
   axios
@@ -75,7 +75,7 @@ function createRandomRoom({
     .then((res) => {
       console.log('were in here', res)
       setLoading(false);
-      setError("");
+      setError('');
 
       if (!res.data) {
         history.push(`/l/${random}${getQueries({ deck, isPrivate })}`);
