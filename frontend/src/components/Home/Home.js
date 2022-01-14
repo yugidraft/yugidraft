@@ -65,6 +65,8 @@ const Home = () => {
         <Heading>
           Yugidraft
         </Heading>
+        <Subtitle>Draft and create your own Yu-Gi-Oh! decks</Subtitle>
+        <Divider/>
         {/* <Image src={yugi}/> */}
         <Form
           onSubmit={(e) =>
@@ -129,6 +131,12 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const Divider = styled.hr`
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  width: 200px;
+  margin-bottom: 2rem;
+`
+
 const LandingWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -142,10 +150,10 @@ const LandingWrapper = styled.div`
 const Heading = styled.h1`
   width: 100%;
   position: relative;
-  margin: 0 0 1rem;
+  margin: 0 0 0.5rem;
   padding: 0 1rem;
   color: white;
-  font-size: 3rem;
+  font-size: 2.5rem;
 `;
 
 const ErrorText = styled.p`
@@ -159,6 +167,11 @@ const LobbyExistsMessage = styled.p`
   a {
     color: #2cce9f;
   }
+`;
+
+const Subtitle = styled.p`
+  font-size: 1em;
+  color: #fff;
 `;
 
 const YellowButton = styled(Link)`
