@@ -3,9 +3,10 @@ const express = require("express");
 const server = require("./server");
 const User = require("./models/user");
 const Card = require("./models/card");
+const mongoose = require("mongoose");
 const Deck = require("./models/deck");
 const { getDeck, getPublicDecks } = require("./models/deck");
-
+mongoose.Promise = global.Promise;
 const router = express.Router();
 
 // router.get('/', async function (req, res) {
@@ -55,8 +56,10 @@ router.post("/api/getPublicDecks", async function (req, res) {
   // console.log(returnedDeck[0].name);
   const allPublicDecks = await Card.distinct("sets.set_name").lean().exec();
   console.log(decks[0]);
+  console.log('allPublicDecks ', allPublicDecks.length);
   for (i = 0; i < allPublicDecks.length; i += 1) {
     var deckName = allPublicDecks[i];
+    // console.log(deckName.length);
     decks[i] = {
         isPublic: true,
         hasSFWCards: false,
@@ -87,28 +90,63 @@ router.post("/api/getPublicDecks", async function (req, res) {
 router.post("/api/getInitialCards", async function (req, res) {
   // const  deckName  = req.query
   // console.log(req.body);
-  console.log(req.body);
-  const deckName = '2013 Collectible Tins Wave 2';
+  console.log("body is, ", req.body);
+  const deckName = '2013 Collectible Tins Wave 1';
   // console.log('params name is', req.params.name);
   // const roomId = "3zauu";
 
-  let cards = [];
-
-  tempCards = await Card.find({ "sets.set_name": deckName });
-  // Returns a random integer from 0 to 9:
-  for (i = 0; i < 9; i += 1){
-    if (cards.length < 9) {
-        var index = Math.floor(Math.random() * tempCards.length-1);
-        cards.push(tempCards[index]);
+  var cards = [];
+  // Promise.all(
+  //   new Promise(Card.find({ "sets.set_name": deckName }).exec()
+  //   .then(results => {
+  //     cards = results[0].map(c => ({value: c.name}));
+  //     res.send(cards);
+  //   })
+  //   .catch(err => {
+  //     throw err;
+  //   })
+  // ))
+  tempCards = await Card.find({ "sets.set_name": "Absolute Powerforce" }).then(results => {
+    var length = results.length;
+    for (i = 0; i < length; i += 1) {
+      cards.push(results[i]);
     }
-  }
-  // var numberofCards = Math.floor(Math.random() * tempCards.length-1);
-  // console.log(numberofCards);
-  // for (i = 0; i < 9; i += 1) {
-  //   cards.push(tempCards[i]);
-  // }
-  return res.status(200).send(cards);
+  })
+  console.log(cards[0])
+  console.log(cards.length)
+  return res.json(cards);
 });
+
+  // var findCards = new Promise((resolve, reject) => {
+  //   Card.find({ "sets.set_name": deckName }), function(err, cards) {
+  //     if (err) {
+  //       reject(err);
+
+  //       resolve(cards);
+  //     }
+  //   }
+  // });
+  // console.log(tempCards.length);
+  // // Returns a random integer from 0 to 9:
+  // for (i = 0; i < tempCards.length; i += 1) {
+  //     cards.push(tempCards[i]);
+  // }
+  // // var numberofCards = Math.floor(Math.random() * tempCards.length-1);
+  // // console.log(numberofCards);
+  // // for (i = 0; i < 9; i += 1) {
+  // //   cards.push(tempCards[i]);
+  // var allCards = {};
+
+  // Promise.all([findCards]).then(results => {
+  //   allCards = {};
+  //   results[0].forEach(function(card) {
+  //     allCards.push(card);
+  //     console.log(allCards)
+  //   });
+  //   // res.status(200).send(allCards);
+  // });
+  // console.log(allCards);
+
   // console.log(
   //   "hitting getInitialCards route",
   //   server.rooms[roomId] ? server.rooms[roomId].blackCards.length : "blah"
