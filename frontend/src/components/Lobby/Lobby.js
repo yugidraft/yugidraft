@@ -9,9 +9,10 @@ const Lobby = () => {
   const [cardList, setCardList] = useState([])
   const [cardName, setCardName] = useState('')
 
+
   const handleClick = e => {
-    setCardName(e.currentTarget.alt)
-    setCardList([...cardList, { cardName: cardName }]);
+    // setCardName(e.target.alt)
+    setCardList([...cardList, { cardName: e.target.alt }]);
     console.log(cardList)
   }
 
@@ -88,7 +89,7 @@ const Container = styled.div`
   grid-template-columns: 30% 30% 10% 25%;
   grid-template-rows: auto;
   gap: 15px 10px;
-  grid-template-areas: 
+  grid-template-areas:
     "h h . d"
     "c c . s"
     "c c . s"
