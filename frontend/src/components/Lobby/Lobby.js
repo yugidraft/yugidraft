@@ -6,6 +6,13 @@ import styled, { createGlobalStyle } from 'styled-components'
 
 const Lobby = () => {
   const [pack, setPack] = useState([])
+  const [cardList, setCardList] = useState([])
+  const [cardName, setCardName] = useState('')
+
+  const handleClick = e => {
+    setCardName(e.currentTarget.alt)
+    setCardList([...cardList, { cardName: cardName }]);
+  }
 
   useEffect(() => {
     axios
@@ -26,20 +33,23 @@ const Lobby = () => {
       <Container>
         <Heading>Create your deck!</Heading>
         <Flex>
-          <Subtitle>Pick your card</Subtitle>
+          <Subtitle>Pick your cards</Subtitle>
           {pack && (
             <CardFlex>
-              {pack.map(({name, img}) => (
-                  <Image src={img} alt={name}/>
+              {pack.map(({name, img, i }) => (
+                  <Image src={img} alt={name} key={i} onClick={(e) => handleClick(e)}/>
               ))}
             </CardFlex>
           )}
         </Flex>
         <List>
-          <ListItem>card 1</ListItem>
-          <ListItem>card 2</ListItem>
-          <ListItem>card 3</ListItem>
+          {cardList.map((x,i) => (
+            <ListItem key={i}>
+              {x.cardName}
+            </ListItem>
+          ))}
         </List>
+        <OrangeButton>Download</OrangeButton>
       </Container>
     </>
   )
@@ -70,7 +80,7 @@ const Container = styled.div`
   grid-template-rows: auto;
   gap: 15px 10px;
   grid-template-areas: 
-    "h h h h"
+    "h h . d"
     "c c . s"
     "c c . s"
     "c c . s";
@@ -85,14 +95,14 @@ const Heading = styled.h1`
 `;
 
 const List = styled.ul`
-  grid-area:s;
+  grid-area: s;
   list-style: none;
   padding: 0;
-  overflow: auto;
   margin: 0;
   border: 3px solid #2cce9f;
   border-radius: 8px;
-  overflow: auto;
+  overflow: scroll;
+  max-height: 640px;
 `;
 
 const ListItem = styled.li`
@@ -118,7 +128,6 @@ const Flex = styled.div`
   flex-direction: column;
   border: 3px solid;
   border-image: linear-gradient(90deg,rgb(255,0,128),rgb(255,140,0),rgb(64,224,208) ) 1;
-  border-image-radius: 8px;
 `;
 
 const Image = styled.img`
@@ -126,10 +135,37 @@ const Image = styled.img`
   height: auto;
   margin: auto;
   margin-bottom: 20px;
+  &:hover {
+    cursor: pointer;
+  }
 `
 const Subtitle = styled.p`
   font-size: 1.5em;
   color: #fff;
 `;
+
+const OrangeButton = styled.button`
+  grid-area: d;
+  background: rgb(255,0,128);
+  appearance: none;
+  color: #000;
+  font-size: 1em;
+  border: 0;
+  padding: 0.7em 1em;
+  border-radius: 8px;
+  margin: 0.75em 0;
+  font-weight: bold;
+  transition: opacity 0.25s;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus,
+  &:disabled {
+    opacity: 0.5;
+    outline: 0;
+  }
+`;
+
 
 export default Lobby
