@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { SERVER_URL } from '../../constants'
 import styled, { createGlobalStyle } from 'styled-components'
-
+import { saveAs } from 'file-saver';
+import FileSaver from 'file-saver';
 
 const Lobby = () => {
   const [pack, setPack] = useState([])
@@ -12,6 +13,12 @@ const Lobby = () => {
   const handleClick = e => {
     setCardName(e.currentTarget.alt)
     setCardList([...cardList, { cardName: cardName }]);
+    console.log(cardList)
+  }
+
+  const handleDownload = () => {
+    var blob = new Blob([JSON.stringify(cardList)], {type: "text/plain;charset=utf-8"});
+    FileSaver.saveAs(blob, "deck.txt");
   }
 
   useEffect(() => {
@@ -27,6 +34,7 @@ const Lobby = () => {
 
   }, []);
 
+
   return (
     <>
       <GlobalStyle/>
@@ -36,8 +44,8 @@ const Lobby = () => {
           <Subtitle>Pick your cards</Subtitle>
           {pack && (
             <CardFlex>
-              {pack.map(({name, img, i }) => (
-                  <Image src={img} alt={name} key={i} onClick={(e) => handleClick(e)}/>
+              {pack.map(({name, img }) => (
+                  <Image src={img} alt={name} onClick={(e) => handleClick(e)}/>
               ))}
             </CardFlex>
           )}
@@ -49,7 +57,7 @@ const Lobby = () => {
             </ListItem>
           ))}
         </List>
-        <OrangeButton>Download</OrangeButton>
+        <OrangeButton onClick={() => handleDownload()}>Download</OrangeButton>
       </Container>
     </>
   )
@@ -146,7 +154,7 @@ const Subtitle = styled.p`
 
 const OrangeButton = styled.button`
   grid-area: d;
-  background: rgb(255,0,128);
+  background: rgb(64, 224, 208);
   appearance: none;
   color: #000;
   font-size: 1em;
