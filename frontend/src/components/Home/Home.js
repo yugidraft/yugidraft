@@ -61,50 +61,53 @@ const Home = () => {
   const [loading, setLoading] = useState("");
   return (
     <LandingWrapper>
-      <GlobalStyle />
-      <Heading>
-        Yugidraft
-      </Heading>
-      <Form
-        onSubmit={(e) =>
-          handleJoinGame({
-            e,
-            setLoading,
-            joinLobbyInputRef,
-            history,
-            setErrorMsg,
-          })
-        }
-      >
-        <JoinLobbyLabel htmlFor="joinlobby">GOT THE LOBBY CODE?</JoinLobbyLabel>
-        <JoinLobbyInput
-          ref={joinLobbyInputRef}
-          id="joinlobby"
-          minLength={MIN_ROOM_NAME_CHARS}
-          maxLength={MAX_ROOM_NAME_CHARS}
-          text="text"
-          required
-        />
-        <GreenButton type="submit" disabled={loading === "join"}>
-          Join Lobby
-        </GreenButton>
-        {errorMsg.type === "join" && !errorMsg.message ? (
-          <LobbyExistsMessage>
-            Lobby doesn't exist. Would you like to{" "}
-            <Link to={`/g/${joinLobbyInputRef.current.value}`}>create it?</Link>
-          </LobbyExistsMessage>
-        ) : (
-          errorMsg.type === "join" &&
-          errorMsg.message && <ErrorText>{errorMsg.message}</ErrorText>
-        )}
-        <OrTextWrap>
-          <OrText>OR</OrText>
-        </OrTextWrap>
-        <BlueButton type="button" to="/games">
-          Public Lobbies
-        </BlueButton>
-      </Form>
-      <OrangeButton to="/create-lobby">Create Lobby</OrangeButton>
+        <GlobalStyle />
+        <Heading>
+          Yugidraft
+        </Heading>
+        <Subtitle>Draft and create your own Yu-Gi-Oh! decks</Subtitle>
+        <Divider/>
+        {/* <Image src={yugi}/> */}
+        <Form
+          onSubmit={(e) =>
+            handleJoinGame({
+              e,
+              setLoading,
+              joinLobbyInputRef,
+              history,
+              setErrorMsg,
+            })
+          }
+        >
+          <JoinLobbyLabel htmlFor="joinlobby">GOT THE LOBBY CODE?</JoinLobbyLabel>
+          <JoinLobbyInput
+            ref={joinLobbyInputRef}
+            id="joinlobby"
+            minLength={MIN_ROOM_NAME_CHARS}
+            maxLength={MAX_ROOM_NAME_CHARS}
+            text="text"
+            required
+          />
+          <PinkButton type="submit" disabled={loading === "join"}>
+            Join Lobby
+          </PinkButton>
+          {errorMsg.type === "join" && !errorMsg.message ? (
+            <LobbyExistsMessage>
+              Lobby doesn't exist. Would you like to{" "}
+              <Link to={`/g/${joinLobbyInputRef.current.value}`}>create it?</Link>
+            </LobbyExistsMessage>
+          ) : (
+            errorMsg.type === "join" &&
+            errorMsg.message && <ErrorText>{errorMsg.message}</ErrorText>
+          )}
+          <OrTextWrap>
+            <OrText>OR</OrText>
+          </OrTextWrap>
+          {/* <BlueButton type="button" to="/games">
+            Public Lobbies
+          </BlueButton> */}
+        </Form>
+        <YellowButton to="/create-lobby">Create Lobby</YellowButton>
     </LandingWrapper>
   );
 };
@@ -113,8 +116,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     text-align: center;
     border: 1em solid;
-    border-image: linear-gradient(90deg, rgb(64,224,208), rgb(255,140,0), rgb(255,0,128) ) 1;
-    background: #000;
+    border-image: linear-gradient(130deg, rgb(50,63,152), rgb(246,224,105), rgb(248,54,116) ) 1;
+    background: linear-gradient(129deg, rgba(14,17,40,1) 0%, rgba(40,9,19,1) 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -128,21 +131,29 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const Divider = styled.hr`
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  width: 200px;
+  margin-bottom: 2rem;
+`
+
 const LandingWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100%;
-  background-color: #000;
+  background: linear-gradient(129deg, rgba(14,17,40,1) 0%, rgba(40,9,19,1) 100%);
   padding: 2em;
 `;
+
 const Heading = styled.h1`
   width: 100%;
   position: relative;
-  margin: 0 0 1rem;
+  margin: 0 0 0.5rem;
   padding: 0 1rem;
   color: white;
+  font-size: 2.5rem;
 `;
 
 const ErrorText = styled.p`
@@ -158,9 +169,14 @@ const LobbyExistsMessage = styled.p`
   }
 `;
 
-const OrangeButton = styled(Link)`
+const Subtitle = styled.p`
+  font-size: 1em;
+  color: #fff;
+`;
+
+const YellowButton = styled(Link)`
   display: block;
-  background: rgb(255, 140, 0);
+  background: rgb(246,224,105);
   appearance: none;
   color: #000;
   font-size: 1em;
@@ -180,10 +196,10 @@ const OrangeButton = styled(Link)`
   }
 `;
 
-const GreenButton = styled.button`
+const PinkButton = styled.button`
   display: block;
   appearance: none;
-  background: #2cce9f;
+  background: rgb(248,54,116);
   color: #000;
   font-size: 1em;
   border: 0;
@@ -200,27 +216,27 @@ const GreenButton = styled.button`
     outline: 0;
   }
 `;
-const BlueButton = styled(Link)`
-  display: block;
-  appearance: none;
-  background: rgb(64, 224, 208);
-  color: #000;
-  font-size: 1em;
-  border: 0;
-  padding: 0.7em 1em;
-  border-radius: 8px;
-  margin: 1em 0 0.75em;
-  font-weight: bold;
-  transition: opacity 0.25s;
-  text-decoration: none;
+// const BlueButton = styled(Link)`
+//   display: block;
+//   appearance: none;
+//   background: rgb(64, 224, 208);
+//   color: #000;
+//   font-size: 1em;
+//   border: 0;
+//   padding: 0.7em 1em;
+//   border-radius: 8px;
+//   margin: 1em 0 0.75em;
+//   font-weight: bold;
+//   transition: opacity 0.25s;
+//   text-decoration: none;
 
-  &:hover,
-  &:focus,
-  &:disabled {
-    opacity: 0.5;
-    outline: 0;
-  }
-`;
+//   &:hover,
+//   &:focus,
+//   &:disabled {
+//     opacity: 0.5;
+//     outline: 0;
+//   }
+// `;
 const OrTextWrap = styled.p`
   position: relative;
   font-style: italic;
@@ -240,7 +256,7 @@ const OrTextWrap = styled.p`
 
 const OrText = styled.span`
   position: relative;
-  background: #000;
+  background: linear-gradient(129deg, rgba(14,17,40,1) 0%, rgba(40,9,19,1) 100%);
   padding: 0 0.5em;
 `;
 
